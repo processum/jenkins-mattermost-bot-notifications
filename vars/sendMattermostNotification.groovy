@@ -17,11 +17,13 @@ def call(String message, String color) {
         error "MATTERMOST_URL and MATTERMOST_CHANNEL_ID must be set as global environment variables!"
     }
 
+    def messageResolver = sh(script: "echo ${message}", returnStdout: true).trim()
+
     if (credentialsId) {
         // Use Jenkins Credentials if MATTERMOST_CREDENTIALS_ID is defined
         withCredentials([string(credentialsId: credentialsId, variable: 'MATTERMOST_BOT_TOKEN')]) {
             def token = MATTERMOST_BOT_TOKEN
-            notifier.sendMessage(url, token, channelId, message, color)
+            notifier.sendMessage(url, token, channelId, messageResolver, color)
             echo token
         }
     } else {
@@ -30,6 +32,6 @@ def call(String message, String color) {
         if (!token) {
             error "MATTERMOST_BOT_TOKEN must be set as a global environment variable if MATTERMOST_CREDENTIALS_ID is not provided!"
         }
-        notifier.sendMessage(url, token, channelId, message, color)
+        notifier.sendMessage(url, token, channelId, messageResolver, color)
     }
 }
