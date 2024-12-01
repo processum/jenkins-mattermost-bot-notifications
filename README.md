@@ -1,43 +1,39 @@
-# jenkins-mattermost-bot-notifications
-Jenkins shared library for  notification using mattermost bot api
+# Jenkins Mattermost Bot Notifications
 
-
-# Jenkins Shared Library for Mattermost Notifications
-
-This Jenkins Shared Library allows you to send customizable notifications to Mattermost channels using the Mattermost Bot API. Notifications can be sent in different colors (success, failure, etc.), and the messages are based on globally set environment variables.
+This Jenkins Shared Library allows you to send customizable notifications to Mattermost channels using the Mattermost Bot API. Notifications can be sent with different colors (e.g., success, failure), and the messages are customizable using global environment variables.
 
 ## Features
 
 - Sends notifications to a Mattermost channel using the Mattermost Bot API.
 - Configurable notification colors (good, danger, warning, etc.).
-- Supports customizable success, failure, and aborted messages via global variables.
+- Supports customizable success, failure, and aborted messages via global environment variables.
 - Simple to integrate into your Jenkins pipeline.
 
 ## Prerequisites
 
-- You must have a **Mattermost** bot set up with the required **personal access token**.
-- The following global environment variables need to be set in Jenkins:
-  - `MATTERMOST_URL`: The URL of your Mattermost instance.
-  - `MATTERMOST_BOT_TOKEN`: The token of the bot that will send messages.
-  - `MATTERMOST_CHANNEL_ID`: The channel ID where the messages will be posted.
-  - `MESSAGE_SUCCESS`: Customizable message template for successful jobs.
-  - `MESSAGE_FAILURE`: Customizable message template for failed jobs.
-  - `MESSAGE_ABORTED`: Customizable message template for aborted jobs.
+Before using this shared library, ensure you have the following set up:
+
+1. **Mattermost bot**: You must have a bot in your Mattermost instance with the required **personal access token**.
+2. **Global environment variables in Jenkins**:
+   - `MATTERMOST_CREDENTIALS_ID`: The ID of the Jenkins credentials containing your Mattermost bot token and URL.
+   - `MATTERMOST_CHANNEL_ID`: The channel ID where the messages will be posted.
+   - `MESSAGE_SUCCESS`: Customizable message for successful jobs.
+   - `MESSAGE_FAILURE`: Customizable message for failed jobs.
+   - `MESSAGE_ABORTED`: Customizable message for aborted jobs.
 
 ## Installation
 
 1. **Add the shared library to your Jenkins instance**:
-   - Go to Jenkins → Manage Jenkins → Configure System.
+   - Go to Jenkins → **Manage Jenkins** → **Configure System**.
    - Under **Global Pipeline Libraries**, add a new library:
      - **Name**: `mattermost-notifier`
      - **Source Code Management**: Git
      - **Repository URL**: Your GitHub/Bitbucket repository where the shared library resides.
 
-2. **Set the required environment variables** in Jenkins:
-   - Go to Jenkins → Manage Jenkins → Configure System.
+2. **Set the required global environment variables**:
+   - Go to Jenkins → **Manage Jenkins** → **Configure System**.
    - Under **Global properties**, add the following environment variables:
-     - `MATTERMOST_URL`: The URL of your Mattermost instance (e.g., `https://mattermost.example.com`).
-     - `MATTERMOST_BOT_TOKEN`: The Mattermost bot's token.
+     - `MATTERMOST_CREDENTIALS_ID`: The credentials ID in Jenkins that contains your Mattermost bot's token and URL.
      - `MATTERMOST_CHANNEL_ID`: The channel ID for the target Mattermost channel.
      - `MESSAGE_SUCCESS`: A message template for successful builds (e.g., `✅ Build SUCCESSFUL! Job: ${env.JOB_NAME} #${env.BUILD_NUMBER}`).
      - `MESSAGE_FAILURE`: A message template for failed builds (e.g., `❌ Build FAILED! Job: ${env.JOB_NAME} #${env.BUILD_NUMBER}`).
@@ -51,9 +47,9 @@ This Jenkins Shared Library allows you to send customizable notifications to Mat
 
 ## Usage
 
-Once the library is set up, you can use it in your Jenkins pipeline as follows:
+Once the library is set up, you can use it in your Jenkins pipeline to send notifications to Mattermost channels. Below is a sample pipeline using the library.
 
-### Example Pipeline
+### Example Jenkinsfile
 
 ```groovy
 @Library('mattermost-notifier') _  // Load the shared library
@@ -62,8 +58,7 @@ pipeline {
     agent any
 
     environment {
-        MATTERMOST_URL = 'https://mattermost.example.com'
-        MATTERMOST_BOT_TOKEN = 'YOUR_BOT_TOKEN'
+        MATTERMOST_CREDENTIALS_ID = 'your-credentials-id'  // Jenkins credentials ID
         MATTERMOST_CHANNEL_ID = 'your-channel-id'
         MESSAGE_SUCCESS = "✅ Build SUCCESSFUL! Job: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
         MESSAGE_FAILURE = "❌ Build FAILED! Job: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
