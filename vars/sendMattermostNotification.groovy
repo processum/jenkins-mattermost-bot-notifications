@@ -20,6 +20,7 @@ def call(String message, String color) {
         withCredentials([string(credentialsId: credentialsId, variable: 'MATTERMOST_BOT_TOKEN')]) {
             def token = MATTERMOST_BOT_TOKEN
             MattermostNotifier.sendMessage(url, token, channelId, message, color)
+            echo token
         }
     } else {
         // Fallback to global environment variable MATTERMOST_BOT_TOKEN
