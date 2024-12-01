@@ -5,7 +5,7 @@ import groovy.json.JsonOutput
 class MattermostNotifier {
 
     // Динамический метод для отправки сообщений в Mattermost
-    def sendMessage(String url, String token, String channelId, String message, String color = 'good', Closure httpRequest) {
+    def sendMessage(String url, String token, String channelId, String message, String color = 'good') {
         def payload = [
             channel_id: channelId,
             message: message,
