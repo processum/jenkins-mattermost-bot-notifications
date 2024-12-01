@@ -1,11 +1,6 @@
 import org.processum.MattermostNotifier
 
-/**
- * Send a message using global environment variables.
- */
-
-import org.processum.MattermostNotifier
-
+ 
 /**
  * Send a message to Mattermost.
  * Automatically uses MATTERMOST_CREDENTIALS_ID if provided.
