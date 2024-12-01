@@ -17,6 +17,7 @@ def call(String message, String color) {
         error "MATTERMOST_URL and MATTERMOST_CHANNEL_ID must be set as global environment variables!"
     }
 
+    def resolvedVar = sh(script: "bash -c 'echo ${message}'", returnStdout: true).trim()
     def messageResolver = sh(script: "echo ${message}", returnStdout: true).trim()
 
     if (credentialsId) {
